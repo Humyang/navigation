@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Template</title>
+</head>
+
+<body>
+    <style>
+    body {
+        margin: 50px;
+    }
+
+    a.button {
+        border: 1px solid #6e64ff;
+        padding: 10px 20px;
+        text-decoration: none;
+        color: #1200ff;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 7px;
+    }
+    textarea#inTextarea {
+    /* border: 0; */
+    /* -webkit-highlight: none; */
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    height: 400px;
+}
+
+div#output {
+    background-color: #effff5;
+    border: 1px solid #9aff81;
+    padding: 15px;
+    border-radius: 15px;
+    padding-top: 0;
+        width: 100%;
+}
+    </style>
+    <a id="kindleFormat_btn" class="button" href="#">kindle英语例句</a>
+    <div id+>
+        <p>代码</p>
+        <div id="code_preview">
+        </div>
+    </div>
+    <div class="main_wrap">
+	    <p>输入</p>
+	    <textarea id="inTextarea" name="" id="" cols="30" rows="10"></textarea>
+	    <p>输出</p>
+	    <div id="output">
+	    </div>
+    </div>
+    <script>
+    window.onload = function() {
+        var outDiv = document.getElementById("output")
+        var inTextarea = document.getElementById("inTextarea")
+
+        var kindleFormat_btn = document.getElementById("kindleFormat_btn")
+        kindleFormat_btn.onclick = function(event) {
+            var result = kindleFormat(inTextarea.value)
+            outDiv.innerText = result
+            event.preventDefault()
+        }
+    }
+    // kindle英语例句
+    function kindleFormat(str) {
+        var str1 = str.replace(/[0-9][?\)]/g, '\n$&')
+        var str2 = str1.replace(/在 例句 [0-9]\）/g, '\n$&')
+        var str3 = str2.replace(/妙语 点 睛|精品 译文/g, '\n\n$&\n\n')
+        var str4 = str3.replace(/[0-9]?[0-9] 　 /g, '\n$&')
+        var str5 = str4.replace(/[0-9](\） )/g, "\n$&")
+        var str6 = str5.replace(/在 例句 \n/g, "在 例句 ")
+        // copy(str6)
+        return str6
+    }
+    </script>
+</body>
+
+</html>
