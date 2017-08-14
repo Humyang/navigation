@@ -34,17 +34,17 @@ sync_github = run_command('git pull origin master')
 if sync_github == 1:
         print 'pull origin master -- success'
         # build new code
-        print 'build production -- begin'
-        build_code = run_command('npm run build')
-        if build_code == 1:
-            print 'build production -- success'
-            # close static serve and api serve
-            print 'close serve -- begin'
-            close_static = get_pid_close(80)
-            if close_static == 1 :
-                print 'close serve -- success'
-            else:
-                print 'close serve -- faile'
-            print 'start serve'
-            # start server
-            subprocess_command('nohup node index.js &')
+        # print 'build production -- begin'
+        # build_code = run_command('npm run build')
+        # if build_code == 1:
+        # print 'build production -- success'
+        # close static serve and api serve
+        print 'close serve -- begin'
+        close_static = get_pid_close(80)
+        if close_static == 1 :
+            print 'close serve -- success'
+        else:
+            print 'close serve -- faile'
+        print 'start serve'
+        # start server
+        subprocess_command('nohup node index.js &')
