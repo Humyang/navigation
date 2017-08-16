@@ -71,6 +71,7 @@ div#output {
         var str4 = str3.replace(/[0-9]?[0-9] 　 /g, '\n$&')
         var str5 = str4.replace(/[0-9](\） )/g, "\n$&")
         var str6 = str5.replace(/在 例句 \n/g, "在 例句 ")
+        var str7 = str6.replace(/[A-Z](:|：)/g, "\n$&\n")
         // copy(str6)
         return str6
     }
