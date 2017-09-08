@@ -21,17 +21,19 @@
         font-weight: 600;
         border-radius: 7px;
     }
-    textarea#inTextarea {
-    /* border: 0; */
-    /* -webkit-highlight: none; */
-    width: 100%;
-    padding: 10px;
+    textarea {
+     -webkit-highlight: none; 
+    width: 49%;
     font-size: 16px;
     height: 400px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 div#output {
-    background-color: #effff5;
+    /*background-color: #effff5;*/
     border: 1px solid #9aff81;
     padding: 15px;
     border-radius: 15px;
@@ -39,7 +41,6 @@ div#output {
         width: 100%;
 }
     </style>
-    <a id="kindleFormat_btn" class="button" href="#">kindle英语例句</a>
     <a id="kindleTiankong_btn" class="button" href="#">kindle英语 文章填空题</a>
     <div id+>
         <p>代码</p>
@@ -48,6 +49,7 @@ div#output {
     </div>
     <div class="main_wrap">
 	    <p>输入</p>
+        <p style="text-align: center;"><a href="#" id="Exchange">exchange</a></p>
 	    <textarea id="inTextarea" name="" id="" cols="30" rows="10"></textarea>
         <textarea id="inTextarea2" name="" id="" cols="30" rows="10"></textarea>
 	    <p>输出</p>
@@ -59,26 +61,26 @@ div#output {
         var outDiv = document.getElementById("output")
         var inTextarea = document.getElementById("inTextarea")
         var inTextarea2 = document.getElementById("inTextarea2")
+        var Exchange = document.getElementById("Exchange")
 
-        var kindleFormat_btn = document.getElementById("kindleFormat_btn")
-        kindleFormat_btn.onclick = function(event) {
-            var result = kindleFormat(inTextarea.value)
-            outDiv.innerText = result
+        Exchange.onclick = function(event){
+            var t = inTextarea.value
+            inTextarea.value = inTextarea2.value
+            inTextarea2.value = t
             event.preventDefault()
         }
+
+        var kindleTiankong_btn = document.getElementById("kindleTiankong_btn")
+        kindleTiankong_btn.onclick = function(event){
+            var dmp = new diff_match_patch();
+            var value1 = inTextarea.value
+            var value2 = inTextarea2.value
+            let diffs = dmp.diff_main(value1, value2, true)
+            var ds = dmp.diff_prettyHtml(diffs);
+            outDiv.innerHTML = ds
+        }
     }
-    // kindle英语例句
-    function kindleFormat(str) {
-        var str1 = str.replace(/[0-9][?\)]/g, '\n$&')
-        var str2 = str1.replace(/在 例句 [0-9]\）/g, '\n$&')
-        var str3 = str2.replace(/妙语 点 睛|精品 译文/g, '\n\n$&\n\n')
-        var str4 = str3.replace(/[0-9]?[0-9] 　 /g, '\n$&')
-        var str5 = str4.replace(/[0-9](\） )/g, "\n$&")
-        var str6 = str5.replace(/在 例句 \n/g, "在 例句 ")
-        var str7 = str6.replace(/[A-Z](:|：)/g, "\n$&\n")
-        // copy(str6)
-        return str7
-    }
+    
     </script>
 </body>
 
