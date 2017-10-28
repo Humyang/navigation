@@ -1,0 +1,43 @@
+body {
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.item_wrap {
+    width: 130px;
+    border: 1px solid #ddd;
+    text-align: center;
+    float: left;
+    cursor: pointer;
+    margin-right: 10px;
+    margin: 5px;
+    padding: 10px;
+}
+
+/*.item_wrap:hover {
+    background-color: #f3ffed;
+    border: 1px solid #96ff62;
+}*/
+.item_wrap a {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    overflow: hidden;
+}
+.bgcolor1{
+    background-color: #ea6c60;
+}
+.bgcolor1 a{
+    color: white !important;
+}
+.bgcolor2{
+    background-color: #36474f;
+}
+.bgcolor2 a{
+	color: white !important;
+}
+.bgcolor3{
+
+}.bgcolor3 a{
+
+}
