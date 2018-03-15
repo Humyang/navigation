@@ -2,8 +2,7 @@
 <html>
 
 <head>
-    <title>Template</title>
-    <script src="../vendors/google-diff-match-patch-js/diff_match_patch_uncompressed.js"></script>
+    <title>RegExp</title>
 </head>
 
 <body>
@@ -40,7 +39,6 @@ div#output {
 }
     </style>
     <a id="kindleFormat_btn" class="button" href="#">kindle英语例句</a>
-    <a id="kindleTiankong_btn" class="button" href="#">kindle英语 文章填空题</a>
     <div id+>
         <p>代码</p>
         <div id="code_preview">
@@ -49,7 +47,6 @@ div#output {
     <div class="main_wrap">
 	    <p>输入</p>
 	    <textarea id="inTextarea" name="" id="" cols="30" rows="10"></textarea>
-        <textarea id="inTextarea2" name="" id="" cols="30" rows="10"></textarea>
 	    <p>输出</p>
 	    <div id="output">
 	    </div>
@@ -58,7 +55,6 @@ div#output {
     window.onload = function() {
         var outDiv = document.getElementById("output")
         var inTextarea = document.getElementById("inTextarea")
-        var inTextarea2 = document.getElementById("inTextarea2")
 
         var kindleFormat_btn = document.getElementById("kindleFormat_btn")
         kindleFormat_btn.onclick = function(event) {
