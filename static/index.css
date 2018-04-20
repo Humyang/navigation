@@ -37,7 +37,14 @@ body {
 	color: white !important;
 }
 .bgcolor3{
-
-}.bgcolor3 a{
-
+    background-color: #ef8e00;
+}
+.bgcolor3 a{
+	color: white !important;
+}
+.bgcolor4{
+    background-color: #607D8B;
+}
+.bgcolor4 a{
+	color: white !important;
 }
