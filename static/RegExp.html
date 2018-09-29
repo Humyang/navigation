@@ -39,6 +39,7 @@ div#output {
 }
     </style>
     <a id="kindleFormat_btn" class="button" href="#">kindle英语例句</a>
+    <a id="toTuoFeng" class="button" href="#">变量转驼峰</a>
     <div id+>
         <p>代码</p>
         <div id="code_preview">
@@ -46,7 +47,17 @@ div#output {
     </div>
     <div class="main_wrap">
 	    <p>输入</p>
-	    <textarea id="inTextarea" name="" id="" cols="30" rows="10"></textarea>
+	    <textarea id="inTextarea" name="" id="" cols="30" rows="10">created_sales_group_id: 1
+            deleted_at: null
+            from_chance_id: 546846
+            id: 1
+            phone: ""
+            real_name: ""
+            remark: ""
+            sn: "YBM82201892682c"
+            status: 1
+            updated_at: "2018-09-26 17:02:36"
+            user_id: 0</textarea>
 	    <p>输出</p>
 	    <div id="output">
 	    </div>
@@ -62,6 +73,30 @@ div#output {
             outDiv.innerText = result
             event.preventDefault()
         }
+        var toTuoFeng =document.getElementById("toTuoFeng")
+        toTuoFeng.onclick=function(event){
+            // 
+            inTextarea.value
+            var str = inTextarea.value
+            // var re = /[a-z]+(\_[a-z]+)+/;
+            // re.exec(str)
+            let match = str.match(/[a-z]+(\_[a-z]+)+/g)
+            
+            let res = match.map((item)=>{
+                return transformStr3(item)
+            })
+            let res2 = res.map((item,index)=>{
+                return '\n'+item+":"+match[index]
+            })
+            // console.log(match)
+            outDiv.innerText = res2
+        }
+    }
+    function transformStr3(str){
+        var re=/_(\w)/g;
+        return str.replace(re,function ($0,$1){
+            return $1.toUpperCase();
+        });
     }
     // kindle英语例句
     function kindleFormat(str) {
