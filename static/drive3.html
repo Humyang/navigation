@@ -11,12 +11,13 @@
     <p>题目：<span id="question"></span></p>
     <div>
         <p>选项</p>
-        <span class="answer">答案1</span>
+        <span  class="answer">答案1</span>
         <span class="answer">答案2</span>
         <span class="answer">答案3</span>
         <span class="answer">答案4</span>
+        <span id="answer2">无答案</span>
     </div>
-    
+    <script src="./vendors/jquery-3.3.1.js"></script>
     <script>
         window.onload = function(){
             let qa = [
@@ -31,17 +32,51 @@
                 {q:'在路边临时停车',a:'【开启示宽灯（小灯）和危险警报灯】'}
             ]
             let answers = ['【开启近光灯】','【开启近光灯和交替使用远近光灯（闪灯）】','【先开启近光灯再开启远光灯】','【开启示宽灯（小灯）和危险警报灯】']
-// Math.round(((Math.random())*10)%9)
             let q =  document.getElementById('question')
+            let anss = document.getElementsByClassName('answer')
             document.getElementById('refresh').addEventListener('click',function(){
-            let ans = document.getElementsByClassName('answer')
-            let random = Math.round(((Math.random())*10)%9)
-                q.innerText = qa[random].q
+            
+            
+            
+            
+
+               
+            })
+            $("#refresh").click(function(){
+                let random = Math.round(((Math.random())*10)%8)
+                $("#question").text(qa[random].q)
+                $("#question").attr('data-answer',qa[random].a)
+
                 for(let i = 0;i<4;i++){
                     let r = Math.round(((Math.random())*10)%3)
-                    ans[i].innerText = answers[r]
+                    anss[i].innerText = answers[r]
                 }
             })
+            $('.answer').on('click',function(i,e,c){
+                // console.log($(this).text())
+                // console.log($("#question").attr('data-answer'))
+                if($(this).text()===$("#question").attr('data-answer')){
+                    console.log('正确')
+                } else{
+                    console.log('错误')
+                }
+            })
+            $("#answer2").click(function(){
+                let ans = $("#question").attr('data-answer')
+                let valid = false
+                $('.answer').each(function(){
+                    console.log()
+                    if($(this).text()===ans){
+                        valid = true
+                    }
+                })
+                if(valid){
+                    console.log('选择错误，正确答案是:',ans)
+                }else{
+                    console.log('选择正确')
+                }
+            })
+            
 
         }
     </script>
