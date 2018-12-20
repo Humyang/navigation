@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    
+    <script src="/vendors/jquery-3.3.1.js"></script>
+    <link rel="manifest" href="/pwa/manifest.json">
+    <title>导航</title>
+    
+</head>
+<body>
+    <a id="actionMessage">触发通知</a>
+<script>
+    // Notification.requestPermission( function(status) {
+    //     console.log(status); // 仅当值为 "granted" 时显示通知
+    //     var n = new Notification("title", {body: "notification body"}); // 显示通知
+    // });
+    $(function(){
+        $("#actionMessage").click(function(){
+            var n = new Notification("title", {body: "notification body"}); // 显示通知
+            
+        })
+    })
+    // window.addEventListener('load', function () {
+        Notification.requestPermission(function (status) {
+            console.log('stats',status)
+            // 这将使我们能在 Chrome/Safari 中使用 Notification.permission
+            if (Notification.permission !== status) {
+                Notification.permission = status;
+            }
+        });
+    // });
+    
+</script>
+</body>
+</html>
