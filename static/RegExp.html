@@ -39,7 +39,8 @@ div#output {
 }
     </style>
     <a id="kindleFormat_btn" class="button" href="#">kindle英语例句</a>
-    <a id="toTuoFeng" class="button" href="#">变量转驼峰</a>
+    <a id="toTuoFeng" class="button" href="#">变量转驼峰（提取）</a>
+    <a id="toTuoFeng2" class="button" href="#">变量转驼峰2（直接替换）</a>
     <a id="toBs" class="button" href="#">测试</a>
     <div id+>
         <p>代码</p>
@@ -49,43 +50,8 @@ div#output {
     <div class="main_wrap">
 	    <p>输入</p>
 	    <textarea id="inTextarea" name="" id="" cols="30" rows="10">
-            11/30 15:58:27顾客主动发起对话
-            来路页
-            http://sh.qihoo.com/9c91e6d7aaadee537?sign=360_0de6261f&uid=4fcf51beb96e34d651484b30950a8db5&scene=3http://sh.qihoo.com/9c91e6d7aaadee537?sign=360_0de6261f&uid=4fcf51beb96e34d651484b30950a8db5&scene=3
-            着陆页
-            海南省成人学历报名与考试中心http://www.sihan.online/A/hn360/m/index.html?20181126?660x220mzaixian?haishitu
-            对话页
-            海南省成人学历报名与考试中心http://www.sihan.online/A/hn360/m/index.html?20181126?660x220mzaixian?haishitu
-            11-30 15:58:31刘梦珂
-            您好，您目前是什么学历呢？
-            11-30 15:59:10
-            【回复】4.大专
-            11-30 15:59:20刘梦珂
-            嗯，您是想提升到本科是吗？
-            11-30 15:59:49
-            11-30 15:59:53刘梦珂
-            您有想要报的专业吗？ 还是简单的考取一个毕业证为主呢？
-            11-30 16:00:19
-            毕业证为主
-            11-30 16:00:24刘梦珂
-            嗯好的，您方便在哪个城市报考呢？老师筛选下当地院校和报考流程
-            11-30 16:03:44
-            海南
-            11-30 16:03:54刘梦珂
-            好的，老师将海南省简单快速拿证专业的院校、拿证时间、拿证费用及报考条件和流程发给您，您先进行一个简单的了解，您接收短信的的手机号是多少呢？
-            11-30 16:04:49
-            18570050225
-            11-30 16:05:00刘梦珂
-            好的，怎么称呼您呢？方便加下您的微信吗，后期有任何疑虑你也能直接找到我们教务老师且帮你解决问题
-            11/30 16:05:02刘梦珂 添加标签
-            海南
-            11/30 16:05:03刘梦珂 添加标签
-            360网盟
-            11/30 16:05:04刘梦珂 添加标签
-            dsp
-            11-30 16:06:05刘梦珂
-            请留意接收短信，系统原因导致短信发送没有成功的话我们会安排专业的老师在适当的时候给您回电，以免耽误信息的及时传达和学习的计划！感谢您的咨询，祝您生活愉快，早日拿到毕业证书
-            11/30 17:07:00对话超时，系统结束了对话
+            order_by_star:null,//注释不会被删除
+            id: null,//直接替换 自动转换冒号左侧的key
         </textarea>
 	    <p>输出</p>
 	    <div id="output">
@@ -120,7 +86,30 @@ div#output {
             // console.log(match)
             outDiv.innerText = res2
         }
-        
+        var toTuoFeng2 =document.getElementById("toTuoFeng2")
+        toTuoFeng2.onclick=function(event){
+            // 
+            inTextarea.value
+            var str = inTextarea.value
+            // var re = /[a-z]+(\_[a-z]+)+/;
+            // re.exec(str)
+            // let match = str.match(/[a-z]+(\_[a-z]+)+/g)
+            let match = str.match(/([a-z]+(\_[a-z]+)+)|([a-z]+\:)/g)
+            let res = match.map((item)=>{
+                return transformStr3(item)
+            })
+            for (let index = 0; index < match.length; index++) {
+                const element = match[index];
+                str = str.replace(element,res[index])
+            }
+            
+            // console.log
+            // let res2 = res.map((item,index)=>{
+            //     return '\n'+item+":"+match[index]
+            // })
+            // console.log(match)
+            outDiv.innerText = str
+        }
         var toBs =document.getElementById("toBs")
         toBs.onclick=function(event){
             // 
