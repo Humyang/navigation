@@ -48,10 +48,11 @@
         border-radius: 5px;
         margin-top: 20px;
       }
-      .result {
+      #result {
         padding: 0 30px;
         color: #795548;
         font-size: 16px;
+        width: 3000px;
       }
       #result span {
         width: 120px;
@@ -59,6 +60,8 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        text-align: left;
+        padding-left: 5px;
       }
       #result span.index {
         width: 50px;
@@ -68,23 +71,29 @@
       .sub-row {
         display: flex;
         align-items: center;
-        justify-content: center;
+        /* justify-content: center; */
       }
     </style>
   </head>
   <body>
     <div class="content">
       <div class="row">
-        初始金额 <input type="text" id="initMoney" value="1000" />
+        初始金额 <input type="text" id="initMoney" value="10000" />
       </div>
       <div class="row">
-        进货价 <input type="text" id="intoPrice" value="100" />
+        进货价 <input type="text" id="intoPrice" value="150" />
       </div>
       <div class="row">
-        卖出价 <input type="text" id="outPrice" value="105" />
+        卖出价 <input type="text" id="outPrice" value="220" />
       </div>
       <div class="row">
-        循环周期次数 <input type="text" id="recyleCount" value="50" />
+        循环周期次数 <input type="text" id="recyleCount" value="25" />
+      </div>
+      <div class="row">
+        每月销售量 <input type="text" id="monthCount" value="300" />
+      </div>
+      <div class="row">
+        每月成本 <input type="text" id="monthCost" value="1500" />
       </div>
     </div>
     <div class="btn-wrap">
@@ -102,15 +111,19 @@
           let intoPrice = document.getElementById("intoPrice").value;
           let outPrice = document.getElementById("outPrice").value;
           let recyleCount = document.getElementById("recyleCount").value;
+          let monthCount = document.getElementById("monthCount").value;
+          let monthCost = document.getElementById("monthCost").value;
           // console.log(recyleCount);
           let res = moneyRecyle(
             +initMoney,
             +intoPrice,
             +outPrice,
-            +recyleCount
+            +recyleCount,
+            +monthCount,
+            +monthCost
           );
           res.reverse();
-          result.innerHTML = res;
+          result.innerHTML = res.join("");
         });
 
         //   初始金额
@@ -123,53 +136,90 @@
         function saveNumber(number) {
           return Math.round(number * 100) / 100;
         }
-        function moneyRecyle(initMoney, intoPrice, outPrice, recyleCount) {
+        function moneyRecyle(
+          initMoney,
+          intoPrice,
+          outPrice,
+          recyleCount,
+          monthCount,
+          monthCost
+        ) {
           let iM = initMoney;
           let currentMoney = initMoney;
           let beforePure = 0;
           let beforeTotal = initMoney;
           let res = [];
+          let totalAmount = 0;
+          let totalMonth = 0;
+          let totalCost = 0;
           for (let index = 0; index < recyleCount; index++) {
-            let beforeAmount = currentMoney;
+            // 纯利润
             let currentAmount = Math.floor(currentMoney / intoPrice);
+            let amount = currentAmount;
             let currentOverPrice = currentAmount * (outPrice - intoPrice);
-            currentMoney = currentMoney + currentOverPrice;
+            let rawPure = currentOverPrice;
+            let needMonth = amount / monthCount;
+            let baseCost = needMonth * monthCost;
+
+            let pure = rawPure - baseCost;
+            currentMoney = currentMoney + currentOverPrice - baseCost;
+            let beforeAmount = currentMoney;
+
+            // 花费时间
+            // 花费成本
+            // 纯利润
+
             // console.log("第" + (index + 1) + "资本周期金额：", currentMoney);
             // 总资金
             let total = currentMoney;
             // 总资金同比上涨
             let totalGrow =
               Math.round(((total - beforeTotal) / beforeTotal) * 10000) / 100;
-            // 纯利润
-            let pure = currentOverPrice;
 
             // 纯利润同比上涨
             let pureRateGrow =
-              Math.round(((pure - beforePure) / beforePure) * 10000) / 100;
+              Math.round(((rawPure - beforePure) / beforePure) * 10000) / 100;
             // 销售量
-            let amount = currentAmount;
+
+            totalAmount += amount;
             // 利润率
             let pureRate = currentOverPrice / beforeAmount;
             //   Math.round((currentOverPrice / beforeAmount) * 10000) / 100;
 
-            beforePure = pure;
+            totalMonth += needMonth;
+            totalCost += baseCost;
+            beforePure = rawPure;
             beforeTotal = total;
+
             // console.log(
             //   `第${index + 1}次资本周期金额：${saveNumber(
             //     total
             //   )}，同比上涨${totalGrow}%。纯利润：${saveNumber(
-            //     pure
+            //     rawPure
             //   )},同比上涨：${pureRateGrow}%。销售量：${amount}。利润率：${saveNumber(
             //     pureRate * 100
             //   )}%。`
             // );
+            let monthAverge = (total - totalCost - initMoney) / totalMonth;
             res.push(
               `<div class='sub-row'>第<span class='index'>${index +
                 1}</span>次资本周期金额：<span>${saveNumber(
                 total
               )}</span>同比上涨<span>${totalGrow}%</span>毛利润：<span>${saveNumber(
+                rawPure
+              )}</span> 纯利润 <span>${saveNumber(
                 pure
-              )}</span>同比上涨：<span>${pureRateGrow}%</span>需要销售量：<span>${amount}</span>利润率：<span>${saveNumber(
+              )}</span> 花费月份<span>${saveNumber(
+                needMonth
+              )}</span> 总月份<span>${saveNumber(
+                totalMonth
+              )}</span>平均每月<span>${saveNumber(
+                monthAverge
+              )}</span> 花费成本<span>${saveNumber(
+                baseCost
+              )} </span>总成本<span>${saveNumber(
+                totalCost
+              )} </span>毛利润同比上涨：<span>${pureRateGrow}%</span>需要销售量：<span>${amount}</span> 总销量<span class='totalAmount'>${totalAmount}</span>利润率：<span>${saveNumber(
                 pureRate * 100
               )}%</span></div>`
             );
