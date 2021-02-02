@@ -40,6 +40,7 @@
     <a id="kindleFormat_btn" class="button" href="#">kindle英语例句</a>
     <a id="toTuoFeng" class="button" href="#">变量转驼峰（提取）</a>
     <a id="toTuoFeng2" class="button" href="#">变量转驼峰2（直接替换）</a>
+    <a id="toXYL" class="button" href="#">变量转匈牙利（直接替换）</a>
     <a id="toBs" class="button" href="#">测试</a>
     <div id+>
       <p>代码</p>
@@ -50,24 +51,80 @@
       <textarea id="inTextarea" name="" id="" cols="30" rows="10">
             order_by_star:null,//注释不会被删除
             id: null,//直接替换 自动转换冒号左侧的key
+
+            form.contactType = data.contactType;
         </textarea
       >
       <p>输出</p>
       <div id="output"></div>
     </div>
     <script>
-      window.onload = function() {
-        var outDiv = document.getElementById('output');
-        var inTextarea = document.getElementById('inTextarea');
+      window.onload = function () {
+        const camelize = function (string) {
+          if (_isNumberical(string)) {
+            return string;
+          }
+          string = string.replace(/[/\-_\s]+(.)?/g, function (match, chr) {
+            return chr ? chr.toUpperCase() : "";
+          });
+          return string.substr(0, 1).toLowerCase() + string.substr(1);
+        };
+        const pascalize = function (string) {
+          const camelized = camelize(string);
+          return camelized.substr(0, 1).toUpperCase() + camelized.substr(1);
+        };
+        const seperateWords = function (string, options) {
+          options = options || {};
+          const separator = options.separator || "_";
+          const split = options.split || /(?=[A-Z])/;
 
-        var kindleFormat_btn = document.getElementById('kindleFormat_btn');
-        kindleFormat_btn.onclick = function(event) {
+          return string.split(split).join(separator);
+        };
+
+        const decamelize = function (string, options) {
+          return seperateWords(string, options).toLowerCase();
+        };
+        const UpperCase = function (string, options) {
+          return seperateWords(string, options).toUpperCase();
+        };
+        const dashStyle = function (string, options) {
+          return seperateWords(string, options).toUpperCase();
+        };
+        function formatTranslate(value, type) {
+          let formated = value;
+          switch (type) {
+            case "under_score":
+              formated = decamelize(value, {});
+              break;
+            case "UNDER_SCORE":
+              formated = UpperCase(value, {});
+              break;
+            case "camelCase":
+              formated = camelize(value);
+              break;
+            case "PascalCase":
+              formated = pascalize(value);
+              break;
+            case "dash-style":
+              formated = dashStyle(value, { separator: "-" }).toLowerCase();
+              break;
+            default:
+              break;
+          }
+          return formated;
+        }
+
+        var outDiv = document.getElementById("output");
+        var inTextarea = document.getElementById("inTextarea");
+
+        var kindleFormat_btn = document.getElementById("kindleFormat_btn");
+        kindleFormat_btn.onclick = function (event) {
           var result = kindleFormat(inTextarea.value);
           outDiv.innerText = result;
           event.preventDefault();
         };
-        var toTuoFeng = document.getElementById('toTuoFeng');
-        toTuoFeng.onclick = function(event) {
+        var toTuoFeng = document.getElementById("toTuoFeng");
+        toTuoFeng.onclick = function (event) {
           //
           inTextarea.value;
           var str = inTextarea.value;
@@ -75,43 +132,49 @@
           // re.exec(str)
           let match = str.match(/([a-z]+(\_[a-z]+)+\:)|([a-z]+\:)/g);
 
-          let res = match.map(item => {
+          let res = match.map((item) => {
             return transformStr3(item);
           });
           let res2 = res.map((item, index) => {
             let str = match[index];
             // str.substr(0, str.length - 1)
-            return '\n' + item + 'null';
+            return "\n" + item + "null";
           });
           // console.log(match)
           outDiv.innerText = res2;
         };
-        var toTuoFeng2 = document.getElementById('toTuoFeng2');
-        toTuoFeng2.onclick = function(event) {
+        var toTuoFeng2 = document.getElementById("toTuoFeng2");
+        toTuoFeng2.onclick = function (event) {
           //
           inTextarea.value;
           var str = inTextarea.value;
-          // var re = /[a-z]+(\_[a-z]+)+/;
-          // re.exec(str)
-          // let match = str.match(/[a-z]+(\_[a-z]+)+/g)
           let match = str.match(/([a-z]+(\_[a-z]+)+)|([a-z]+\:)/g);
-          let res = match.map(item => {
+          let res = match.map((item) => {
             return transformStr3(item);
           });
           for (let index = 0; index < match.length; index++) {
             const element = match[index];
             str = str.replace(element, res[index]);
           }
-
-          // console.log
-          // let res2 = res.map((item,index)=>{
-          //     return '\n'+item+":"+match[index]
-          // })
-          // console.log(match)
           outDiv.innerText = str;
         };
-        var toBs = document.getElementById('toBs');
-        toBs.onclick = function(event) {
+        var toXYL = document.getElementById("toXYL");
+        toXYL.onclick = function (event) {
+          //
+          inTextarea.value;
+          var str = inTextarea.value;
+          let match = str.match(/([a-z]+(([A-Z]{1})[a-z]+)+)/g);
+          let res = match.map((item) => {
+            return formatTranslate(item,'under_score');
+          });
+          for (let index = 0; index < match.length; index++) {
+            const element = match[index];
+            str = str.replace(element, res[index]);
+          }
+          outDiv.innerText = str;
+        };
+        var toBs = document.getElementById("toBs");
+        toBs.onclick = function (event) {
           //
           inTextarea.value;
           var str = inTextarea.value;
@@ -119,11 +182,11 @@
           // re.exec(str)
           let match = str.match(/[a-z]+(\_[a-z]+)+/g);
 
-          let res = match.map(item => {
+          let res = match.map((item) => {
             return transformStr3(item);
           });
           let res2 = res.map((item, index) => {
-            return '\n' + item + ':' + match[index];
+            return "\n" + item + ":" + match[index];
           });
           // console.log(match)
           outDiv.innerText = res2;
@@ -131,19 +194,19 @@
       };
       function transformStr3(str) {
         var re = /_(\w)/g;
-        return str.replace(re, function($0, $1) {
+        return str.replace(re, function ($0, $1) {
           return $1.toUpperCase();
         });
       }
       // kindle英语例句
       function kindleFormat(str) {
-        var str1 = str.replace(/[0-9][?\)]/g, '\n$&');
-        var str2 = str1.replace(/在 例句 [0-9]\）/g, '\n$&');
-        var str3 = str2.replace(/妙语 点 睛|精品 译文/g, '\n\n$&\n\n');
-        var str4 = str3.replace(/[0-9]?[0-9] 　 /g, '\n$&');
-        var str5 = str4.replace(/[0-9](\） )/g, '\n$&');
-        var str6 = str5.replace(/在 例句 \n/g, '在 例句 ');
-        var str7 = str6.replace(/[A-Z](:|：)/g, '\n$&\n');
+        var str1 = str.replace(/[0-9][?\)]/g, "\n$&");
+        var str2 = str1.replace(/在 例句 [0-9]\）/g, "\n$&");
+        var str3 = str2.replace(/妙语 点 睛|精品 译文/g, "\n\n$&\n\n");
+        var str4 = str3.replace(/[0-9]?[0-9] 　 /g, "\n$&");
+        var str5 = str4.replace(/[0-9](\） )/g, "\n$&");
+        var str6 = str5.replace(/在 例句 \n/g, "在 例句 ");
+        var str7 = str6.replace(/[A-Z](:|：)/g, "\n$&\n");
         // copy(str6)
         return str7;
       }
