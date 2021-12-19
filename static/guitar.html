@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+      name="viewport"
+    />
+    <title>导航</title>
+    <style>
+        body,html {padding: 0;margin: 0;}
+        #imgId{height: 100vh;width: 100%;}
+    </style>
+    <!-- <link rel="stylesheet" type="text/css" href="./index.css" /> -->
+  </head>
+  <body>
+      <div>
+
+          <img id="imgId" src="./guitar/E MI.png" alt="">
+      </div>
+  </body>
+  <script>
+      
+      function bbb(){
+          let imgSrc = ['E MI','A LA','D RE','G SOL','B XI']
+          let imgElement = document.getElementById('imgId')
+          let imgIndex = 1
+          imgElement.addEventListener('click',()=>{
+            imgIndex = imgIndex>imgSrc.length-1?0:imgIndex
+              imgElement.setAttribute('src','./guitar/'+imgSrc[imgIndex++]+'.png')
+              
+          })
+      }
+      window.onload = bbb
+  </script>
+</html>
